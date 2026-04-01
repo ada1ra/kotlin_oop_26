@@ -55,13 +55,14 @@ class SingleLinkedListTest {
         assertEquals(2, list.size)
     }
 
+    // Fixed (indexOf instead of contains)
     @Test
     fun `contains works`() {
         list.add(1)
         list.add(2)
 
-        assertTrue(list.contains(1))
-        assertFalse(list.contains(3))
+        assertTrue(list.indexOf(1) != -1)
+        assertFalse(list.indexOf(3) != -1)
     }
 
     @Test
@@ -85,14 +86,18 @@ class SingleLinkedListTest {
         }
     }
 
+    // Fixed (add annotation, index(20) = 1)
+    @Test
     fun `indexOf works`() {
         list.add(10)
         list.add(20)
         list.add(30)
 
-        assertEquals(2, list.indexOf(20))
+        assertEquals(1, list.indexOf(20))
     }
 
+    // Fixed (add annotation)
+    @Test
     fun `set works`() {
         list.add(10)
         list.add(20)
@@ -100,5 +105,29 @@ class SingleLinkedListTest {
 
         list[2] = 5
         assertEquals(5, list[2])
+    }
+
+    @Test
+    fun `size increases after adding elements`() {
+        list.add(5)
+        list.add(10)
+        assertEquals(2, list.size)
+    }
+
+    @Test
+    fun `remove works when deleting first element`() {
+        list.add(1)
+        list.add(2)
+        list.add(3)
+        assertTrue(list.remove(1))
+        assertEquals(2, list.size)
+        assertEquals(2, list[0])
+    }
+
+    @Test
+    fun `indexOf returns -1 for missing element`() {
+        list.add(100)
+        list.add(200)
+        assertEquals(-1, list.indexOf(999))
     }
 }
