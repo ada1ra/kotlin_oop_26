@@ -55,14 +55,13 @@ class SingleLinkedListTest {
         assertEquals(2, list.size)
     }
 
-    // Fixed (indexOf instead of contains)
     @Test
     fun `contains works`() {
         list.add(1)
         list.add(2)
 
-        assertTrue(list.indexOf(1) != -1)
-        assertFalse(list.indexOf(3) != -1)
+        assertTrue(list.contains(1))
+        assertFalse(list.contains(3))
     }
 
     @Test
