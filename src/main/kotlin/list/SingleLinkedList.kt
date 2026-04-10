@@ -1,53 +1,116 @@
 package org.example.list
 
-class SingleLinkedList : CustomList {
-    // don't use any java/kotlin internal datastructures like lists))
-    // write from scratch))
+open class SingleLinkedList(initSize: Int = 2) : CustomList {
 
+    // Node class for the linked list elements
+    private class Node(var value: Int, var next: Node? = null)
 
-    override val size: Int
-        get() = TODO("Implement this")
+    private var head: Node? = null
+    override var size: Int = 0
+        protected set
 
+    // Helper function
+    private fun getNodeAt(index: Int): Node {
+        checkIndex(index)
+        var current = head
+        repeat(index) {
+            current = current?.next
+        }
+        return current ?: throw IndexOutOfBoundsException()
+    }
+
+    // Add at the end
     override fun add(element: Int) {
-        TODO("Implement this")
+        if (head == null) head = Node(element)
+        else {
+            var current = head
+            while (current?.next != null) current = current.next
+            current?.next = Node(element)
+        }
+        size++
     }
 
-    override operator fun set(index: Int, value: Int) {
-        TODO("Implement this")
-    }
-
+    // Add at the beginning
     override fun addFirst(element: Int) {
-        TODO("Implement this")
+        head = Node(element, head)
+        size++
     }
 
-    override operator fun get(index: Int): Int {
-        TODO("Implement this")
+    // Get the item at the index
+    override fun get(index: Int): Int {
+        return getNodeAt(index).value
     }
 
+    // Replace the item at the index
+    override fun set(index: Int, value: Int) {
+        getNodeAt(index).value = value
+    }
+
+    // Find the first occurrence of the element
     override fun indexOf(element: Int): Int {
-        TODO("Implement this")
+        var current = head
+        var index = 0
+        while (current != null) {
+            if (current.value == element) return index
+            current = current.next
+            index++
+        }
+        return -1
     }
 
+    // Remove first occurrence of element
     override fun remove(element: Int): Boolean {
-        TODO("Implement this")
+        if (head == null) return false
+
+        if (head?.value == element) {
+            head = head?.next
+            size--
+            return true
+        }
+
+        var current = head
+        while (current?.next != null) {
+            if (current.next?.value == element) {
+                current.next = current.next?.next
+                size--
+                return true
+            }
+            current = current.next
+        }
+        return false
+    }
+
+    fun removeFirst(): Int {
+        if (head == null) throw NoSuchElementException("Stack is empty")
+        val value = head!!.value
+        head = head?.next
+        size--
+        return value
     }
 
     override fun iterator(): Iterator<Int> {
         return object : Iterator<Int> {
-            override fun hasNext(): Boolean {
-                TODO("Implement this")
-            }
+            private var current = head
+
+            override fun hasNext(): Boolean = current != null
 
             override fun next(): Int {
-                TODO("Implement this")
+                if (!hasNext()) throw NoSuchElementException()
+                val value = current!!.value
+                current = current!!.next
+                return value
             }
         }
     }
 
+    // Helper function to validate an index
+    private fun checkIndex(index: Int) {
+        if (index !in 0 until size) throw IndexOutOfBoundsException("Index $index, size $size")
+    }
+
     companion object {
-        fun singleLinkedListOf(vararg items: Int) =
-            items.fold(SingleLinkedList()) { list, item ->
-                list.also { it.add(item) }
-            }
+        fun singleLinkedListOf(vararg items: Int) = items.fold(SingleLinkedList(items.size)) { list, item ->
+            list.also { it.add(item) }
+        }
     }
 }
