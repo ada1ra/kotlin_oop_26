@@ -9,6 +9,16 @@ class SingleLinkedList : CustomList {
     override var size: Int = 0
         private set
 
+    // Helper function
+    private fun getNodeAt(index: Int): Node {
+        checkIndex(index)
+        var current = head
+        repeat(index) {
+            current = current?.next
+        }
+        return current ?: throw IndexOutOfBoundsException()
+    }
+
     // Add at the end
     override fun add(element: Int) {
         if (head == null)
@@ -30,22 +40,12 @@ class SingleLinkedList : CustomList {
 
     // Get the item at the index
     override fun get(index: Int): Int {
-        checkIndex(index)
-        var current = head
-        repeat(index) {
-            current = current?.next
-        }
-        return current?.value  ?: throw IndexOutOfBoundsException()
+        return getNodeAt(index).value
     }
 
     // Replace the item at the index
     override fun set(index: Int, value: Int) {
-        checkIndex(index)
-        var current = head
-        repeat(index) {
-            current = current?.next
-        }
-        current?.value = value
+        getNodeAt(index).value = value
     }
 
     // Find the first occurrence of the element
