@@ -6,11 +6,7 @@ class CustomArrayList(initSize: Int = 2) : CustomList {
         private set
 
     private fun resize(newSize: Int): IntArray {
-        val newArray = IntArray(newSize)
-        for (i in 0 until size) {
-            newArray[i] = inner[i]
-        }
-        return newArray
+        return inner.copyOf(newSize)
     }
 
     private fun checkIndex(index: Int) {
@@ -20,6 +16,9 @@ class CustomArrayList(initSize: Int = 2) : CustomList {
     }
 
     private fun ensureCapacity() {
+        if (inner.isEmpty()) {
+            inner = resize(1)
+        }
         if (size == inner.size) {
             inner = resize(inner.size * 2)
         }
@@ -61,11 +60,11 @@ class CustomArrayList(initSize: Int = 2) : CustomList {
         return true
     }
 
-    fun removeLast(): Int {
+    fun removeLast(): Boolean {
         if (size == 0) throw NoSuchElementException("No elements")
-        val last = get(size - 1)
+        set(size - 1, 0)
         size--
-        return last
+        return true
     }
 
     override fun indexOf(element: Int): Int {

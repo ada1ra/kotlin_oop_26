@@ -9,7 +9,9 @@ class SingleLinkedStack() : SingleLinkedList(), Stack {
 
     override fun pop(): Int {
         if (isEmpty) throw NoSuchElementException("Stack is empty")
-        return removeFirst()     // O(1)
+        val result = get(0)
+        removeFirst()
+        return result    // O(1)
     }
 
     override fun peek(): Int {

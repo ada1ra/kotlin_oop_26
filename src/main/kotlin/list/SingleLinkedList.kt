@@ -80,12 +80,11 @@ open class SingleLinkedList(initSize: Int = 2) : CustomList {
         return false
     }
 
-    fun removeFirst(): Int {
+    fun removeFirst(): Boolean {
         if (head == null) throw NoSuchElementException("Stack is empty")
-        val value = head!!.value
         head = head?.next
         size--
-        return value
+        return true
     }
 
     override fun iterator(): Iterator<Int> {

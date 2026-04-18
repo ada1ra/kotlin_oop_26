@@ -11,8 +11,9 @@ class ArrayListStack(initSize: Int = 2) : Stack, Iterable<Int> {
 
     override fun pop(): Int {
         if (isEmpty) throw NoSuchElementException("Stack is empty")
-
-        return storage.removeLast()
+        val result = storage[size - 1]
+        storage.removeLast()
+        return result
     }
 
     override fun peek(): Int {
