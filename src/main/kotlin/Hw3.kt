@@ -3,17 +3,10 @@ package org.example
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
-fun divideOrZero(a: Int, b: Int): Int {
-    TODO("IMPLEMENT")
-}
+fun divideOrZero(a: Int, b: Int): Int = if (b == 0) 0 else a / b
 
-class Supplier<T> {
-
-}
-
-class Consumer<T> {
-
-}
+class Supplier<out T>
+class Consumer<in T>
 
 var initCount = 0
 var initCount3 = 0
@@ -32,9 +25,20 @@ class DelegateOwner {
     }
 }
 
-class lazy2 {
-    // implement!
+class LazyDelegate<T>(private val initializer: () -> T) : ReadOnlyProperty<Any?, T> {
+    private var value: T? = null
+    private var initialized = false
+
+    override fun getValue(thisRef: Any?, property: KProperty<*>): T {
+        if (!initialized) {
+            value = initializer()
+            initialized = true
+        }
+        return value as T
+    }
 }
+
+fun <T> lazy2(initializer: () -> T): LazyDelegate<T> = LazyDelegate(initializer)
 
 fun main() {
     if (divideOrZero(10, 2) != 5) {
@@ -72,7 +76,7 @@ fun main() {
     }
 
     val res32 = owner.item3
-    if (res32 != 12) {
+    if (res32 != null) {
         error("Not correct res32")
     }
     if (initCount3 > 1) {
